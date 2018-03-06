@@ -1,0 +1,22 @@
+{
+  "name": "reactappapifetch",
+  "version": "1.0.0",
+  "description": "working on how react fetches api calls",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/majorazero/reactAppApiFetch.git"
+  },
+  "author": "Daniel Hsu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/majorazero/reactAppApiFetch/issues"
+  },
+  "homepage": "https://github.com/majorazero/reactAppApiFetch#readme",
+  "dependencies": {
+    "http-server": "^0.11.1"
+  }
+}
