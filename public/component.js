@@ -12,7 +12,7 @@ class Page extends React.Component{
   }
   componentDidMount(){
     console.log(2);
-    this._spotifyApiCallAuthorize();
+    //this._spotifyApiCallAuthorize();
   }
   _spotifyApiCallAuthorize(){
     let client_id = "13e2291fbf6f457a802925ffb8e13fa8";
