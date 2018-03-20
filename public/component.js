@@ -41,7 +41,8 @@ class Page extends React.Component{
     });
   }
 }
-jQuery(function(){
+
+$(function(){
   ReactDOM.render(
     <Page />,
     document.getElementById('page')
