@@ -26,12 +26,34 @@ class Page extends React.Component{
   }
 }
 class List extends React.Component{
+  constructor(){
+    super();
+    this.state = {
+      panels:[{day:"Monday",
+              temp: 65,
+              humid: 35,
+              id: 1,
+              weather: "sunny"}]
+    };
+  }
   render(){
+    const panels = this._getPanel();
     return(
       <div className="weather-wrapper">
-        <Panel />
+        {panels}
       </div>
     );
+  }
+  _getPanel(){
+    return this.state.panels.map((panel) => {
+      return <Panel
+              key={panel.id}
+              id={panel.id}
+              day={panel.day}
+              temp={panel.temp}
+              humid={panel.humid}
+              weather={panel.weather}/>
+    });
   }
 }
 class Panel extends React.Component{
@@ -40,11 +62,19 @@ class Panel extends React.Component{
       <div>
         <ul className="weather-panel">
           <img className="weather-icon" src="assets/rain.png" />
-          <div>Monday</div>
+          <div className="weather-day">Monday</div>
+          <div className="weather-temp">
+            <div>56 &#8451;</div>
+            <div>Humidity: 34%</div>
+          </div>
         </ul>
         <ul className="weather-panel">
           <img className="weather-icon" src="assets/sunny.png"/>
-          <div>Tueday</div>
+          <div className="weather-day">{this.props.day}</div>
+            <div className="weather-temp">
+              <div>{this.props.temp} &#8451;</div>
+              <div>Humidity: {this.props.humid}%</div>
+            </div>
         </ul>
       </div>
     );

@@ -22,3 +22,19 @@
   width: 50px;
   height: auto;
 }
+.weather-day{
+  background-color: #B7E3EA;
+  border-radius: 20px;
+  width: 90px;
+  text-align: center;
+  margin: auto;
+}
+.weather-temp{
+  background-color:#92B9BF;
+  border-radius: 10px;
+  font-size: 15px;
+  /* width: 70px; */
+  height: 60px;
+  margin: 5px;
+
+}
