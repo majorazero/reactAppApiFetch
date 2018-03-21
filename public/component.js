@@ -6,7 +6,10 @@ class Page extends React.Component{
   }
   render(){
     return(
-      <div className="intro">Hello World!</div>
+      <div>
+        <h1 className="intro">Weather!</h1>
+        <List />
+      </div>
     );
   }
   _weatherApiCall(){
@@ -22,7 +25,29 @@ class Page extends React.Component{
     });
   }
 }
-
+class List extends React.Component{
+  render(){
+    return(
+      <div className="weather-wrapper">
+        <Panel />
+      </div>
+    );
+  }
+}
+class Panel extends React.Component{
+  render(){
+    return(
+      <div>
+        <ul className="weather-panel">
+          <img className="weather-icon" src="assets/rain.png" />
+        </ul>
+        <ul className="weather-panel">
+          <img className="weather-icon" src="assets/rain.png"/>
+        </ul>
+      </div>
+    );
+  }
+}
 $(function(){
   ReactDOM.render(
     <Page />,
