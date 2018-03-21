@@ -40,9 +40,11 @@ class Panel extends React.Component{
       <div>
         <ul className="weather-panel">
           <img className="weather-icon" src="assets/rain.png" />
+          <div>Monday</div>
         </ul>
         <ul className="weather-panel">
-          <img className="weather-icon" src="assets/rain.png"/>
+          <img className="weather-icon" src="assets/sunny.png"/>
+          <div>Tueday</div>
         </ul>
       </div>
     );
