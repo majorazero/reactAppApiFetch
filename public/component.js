@@ -33,7 +33,7 @@ class List extends React.Component{
               temp: 65,
               humid: 35,
               id: 1,
-              weather: "sunny"}]
+              weather: "cloudy"}]
     };
   }
   render(){
@@ -69,7 +69,7 @@ class Panel extends React.Component{
           </div>
         </ul>
         <ul className="weather-panel">
-          <img className="weather-icon" src="assets/sunny.png"/>
+          {this._weather()}
           <div className="weather-day">{this.props.day}</div>
             <div className="weather-temp">
               <div>{this.props.temp} &#8451;</div>
@@ -78,6 +78,21 @@ class Panel extends React.Component{
         </ul>
       </div>
     );
+  }
+  _weather(){
+    switch (this.props.weather){
+      case "sunny":
+        return (<img className="weather-icon" src="assets/sunny.png"/>);
+        break;
+      case "rain":
+        return (<img className="weather-icon" src="assets/rain.png"/>);
+        break;
+      case "cloudy":
+        return (<img className="weather-icon" src="assets/cloudy.png"/>);
+        break;
+      default:
+        return;
+    }
   }
 }
 $(function(){
