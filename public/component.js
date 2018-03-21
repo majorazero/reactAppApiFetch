@@ -2,25 +2,45 @@ class Page extends React.Component{
   constructor(){
     super();
     this.state = {
+      weatherData: []
     };
+  }
+  componentDidMount(){
+    this._weatherApiCall();
   }
   render(){
     return(
       <div>
-        <h1 className="intro">Weather!</h1>
+        <h1 className="intro">Weather of... !</h1>
+        <div>Pick a new city here!</div>
+        <form>
+          <input placeholder="City Name" />
+        </form>
         <List />
       </div>
     );
   }
   _weatherApiCall(){
     let apiKey = "c033c7d88ddd656c159ed45f9a39923e";
-    let city = "London";
-    let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=imperial`;
+    let city = "Rosemead";
+    let url = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=imperial`;
     fetch(url)
     .then(response => {
       response.json()
       .then( myJson => {
-        console.log(myJson.name);
+        console.log(myJson);
+        let weather = {};
+        for(var i = 4; i < myJson.list.length; i +=8){
+          let jsonData = myJson.list[i];
+          console.log(jsonData);
+          console.log(i);
+          weather.temp = jsonData.main.temp;
+          weather.humid = jsonData.main.humidity;
+          weather.id = this.state.weatherData.length+1;s
+          weather.weather = jsonData.weather[0].main;
+          this.setState({weatherData: this.state.weatherData.concat([weather])});
+          console.log(this.state.weatherData);
+        }
       });
     });
   }
@@ -33,7 +53,12 @@ class List extends React.Component{
               temp: 65,
               humid: 35,
               id: 1,
-              weather: "cloudy"}]
+              weather: "cloudy"},
+              {day:"Tuesday",
+              temp: 35,
+              humid: 95,
+              id: 2,
+              weather: "rain"}]
     };
   }
   render(){
@@ -59,15 +84,6 @@ class List extends React.Component{
 class Panel extends React.Component{
   render(){
     return(
-      <div>
-        <ul className="weather-panel">
-          <img className="weather-icon" src="assets/rain.png" />
-          <div className="weather-day">Monday</div>
-          <div className="weather-temp">
-            <div>56 &#8451;</div>
-            <div>Humidity: 34%</div>
-          </div>
-        </ul>
         <ul className="weather-panel">
           {this._weather()}
           <div className="weather-day">{this.props.day}</div>
@@ -76,7 +92,6 @@ class Panel extends React.Component{
               <div>Humidity: {this.props.humid}%</div>
             </div>
         </ul>
-      </div>
     );
   }
   _weather(){
