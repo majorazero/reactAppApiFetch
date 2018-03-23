@@ -2,11 +2,7 @@ class Page extends React.Component{
   constructor(){
     super();
     this.state = {
-      weatherData: []
     };
-  }
-  componentDidMount(){
-    this._weatherApiCall();
   }
   render(){
     return(
@@ -20,45 +16,12 @@ class Page extends React.Component{
       </div>
     );
   }
-  _weatherApiCall(){
-    let apiKey = "c033c7d88ddd656c159ed45f9a39923e";
-    let city = "Rosemead";
-    let url = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=imperial`;
-    fetch(url)
-    .then(response => {
-      response.json()
-      .then( myJson => {
-        console.log(myJson);
-        let weather = {};
-        for(var i = 4; i < myJson.list.length; i +=8){
-          let jsonData = myJson.list[i];
-          console.log(jsonData);
-          console.log(i);
-          weather.temp = jsonData.main.temp;
-          weather.humid = jsonData.main.humidity;
-          weather.id = this.state.weatherData.length+1;s
-          weather.weather = jsonData.weather[0].main;
-          this.setState({weatherData: this.state.weatherData.concat([weather])});
-          console.log(this.state.weatherData);
-        }
-      });
-    });
-  }
 }
 class List extends React.Component{
   constructor(){
     super();
     this.state = {
-      panels:[{day:"Monday",
-              temp: 65,
-              humid: 35,
-              id: 1,
-              weather: "cloudy"},
-              {day:"Tuesday",
-              temp: 35,
-              humid: 95,
-              id: 2,
-              weather: "rain"}]
+      panels:[]
     };
   }
   render(){
@@ -69,6 +32,9 @@ class List extends React.Component{
       </div>
     );
   }
+  componentDidMount(){
+    this._weatherApiCall();
+  }
   _getPanel(){
     return this.state.panels.map((panel) => {
       return <Panel
@@ -78,6 +44,58 @@ class List extends React.Component{
               temp={panel.temp}
               humid={panel.humid}
               weather={panel.weather}/>
+    });
+  }
+  _weatherApiCall(name){
+    let apiKey = "c033c7d88ddd656c159ed45f9a39923e";
+    let city = name || "Rosemead";
+    let url = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=imperial`;
+    fetch(url)
+    .then(response => {
+      response.json()
+      .then( myJson => {
+        console.log(myJson);
+        for(var i = 4; i < myJson.list.length; i +=8){
+          let weather = {};
+          let jsonData = myJson.list[i];
+          weather.temp = jsonData.main.temp;
+          weather.humid = jsonData.main.humidity;
+          weather.id = this.state.panels.length+1;
+          weather.weather = jsonData.weather[0].main;
+
+          var day = new Date(jsonData.dt)
+          console.log(day);
+          console.log(i);
+          console.log(jsonData.dt);
+          day = day.getDay();
+          switch(day){
+            case 0:
+              weather.day = "Sunday";
+              break;
+            case 1:
+              weather.day = "Monday";
+              break;
+            case 2:
+              weather.day = "Tuesday";
+              break;
+            case 3:
+              weather.day = "Wednesday";
+              break;
+            case 4:
+              weather.day = "Thursday";
+              break;
+            case 5:
+              weather.day = "Friday";
+              break;
+            case 6:
+              weather.day = "Saturday";
+              break;
+            default:
+              return;
+          }
+          this.setState({panels: this.state.panels.concat([weather])});
+        }
+      });
     });
   }
 }
@@ -96,13 +114,14 @@ class Panel extends React.Component{
   }
   _weather(){
     switch (this.props.weather){
-      case "sunny":
+      case "Clear":
+      case "Sunny":
         return (<img className="weather-icon" src="assets/sunny.png"/>);
         break;
-      case "rain":
+      case "Rain":
         return (<img className="weather-icon" src="assets/rain.png"/>);
         break;
-      case "cloudy":
+      case "Cloudy":
         return (<img className="weather-icon" src="assets/cloudy.png"/>);
         break;
       default:
