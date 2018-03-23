@@ -1,15 +1,25 @@
 class Page extends React.Component{
+  constructor(){
+    super();
+    this.state ={
+      city: "Rosemead"
+    };
+  }
   render(){
     return(
       <div>
-        <h1 className="intro">Weather of... !</h1>
+        <h1 className="intro">Weather of... {this.state.city}!</h1>
         <div>Pick a new city here!</div>
-        <form>
-          <input placeholder="City Name" />
+        <form onSubmit={this._handleSubmit.bind(this)}>
+          <input placeholder="City Name" ref={city => this._city = city}/>
         </form>
-        <List />
+        <List city={this.state.city}/>
       </div>
     );
+  }
+  _handleSubmit(event){
+    event.preventDefault();
+    this.setState({city: this._city.value});
   }
 }
 class List extends React.Component{
@@ -28,7 +38,11 @@ class List extends React.Component{
     );
   }
   componentDidMount(){
-    this._weatherApiCall();
+    this._weatherApiCall(this.props.city);
+  }
+  componentWillReceiveProps(nextProps){
+    this.state.panels.length = 0;
+    this._weatherApiCall(nextProps.city);
   }
   _getPanel(){
     return this.state.panels.map((panel) => {
@@ -49,7 +63,6 @@ class List extends React.Component{
     .then(response => {
       response.json()
       .then( myJson => {
-        console.log(myJson);
         for(var i = 4; i < myJson.list.length; i +=8){
           let weather = {};
           let jsonData = myJson.list[i];
@@ -113,7 +126,7 @@ class Panel extends React.Component{
       case "Rain":
         return (<img className="weather-icon" src="assets/rain.png"/>);
         break;
-      case "Cloudy":
+      case "Clouds":
         return (<img className="weather-icon" src="assets/cloudy.png"/>);
         break;
       default:
