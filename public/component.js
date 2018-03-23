@@ -1,9 +1,4 @@
 class Page extends React.Component{
-  constructor(){
-    super();
-    this.state = {
-    };
-  }
   render(){
     return(
       <div>
@@ -63,10 +58,7 @@ class List extends React.Component{
           weather.id = this.state.panels.length+1;
           weather.weather = jsonData.weather[0].main;
 
-          var day = new Date(jsonData.dt)
-          console.log(day);
-          console.log(i);
-          console.log(jsonData.dt);
+          var day = new Date(jsonData.dt*1000);
           day = day.getDay();
           switch(day){
             case 0:
