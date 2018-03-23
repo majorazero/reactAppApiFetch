@@ -4,7 +4,6 @@ class Page extends React.Component{
     this._handleCode = this._handleCode.bind(this);
     this.state ={
       city: "Rosemead",
-      code: "200",
       errMsg: ""
     };
   }
@@ -56,7 +55,6 @@ class List extends React.Component{
   }
   componentWillReceiveProps(nextProps){
     if(this.props.city !== nextProps.city){
-      console.log(2);
       this._weatherApiCall(nextProps.city);
     }
   }
