@@ -9,10 +9,12 @@ class Page extends React.Component{
     return(
       <div>
         <h1 className="intro">Weather of... {this.state.city}!</h1>
-        <div>Pick a new city here!</div>
-        <form onSubmit={this._handleSubmit.bind(this)}>
-          <input placeholder="City Name" ref={city => this._city = city}/>
-        </form>
+        <div className = "form-box">
+          <div>Pick a new city here!</div>
+          <form onSubmit={this._handleSubmit.bind(this)}>
+            <input placeholder="City Name" ref={city => this._city = city}/>
+          </form>
+        </div>
         <List city={this.state.city}/>
       </div>
     );
@@ -41,7 +43,6 @@ class List extends React.Component{
     this._weatherApiCall(this.props.city);
   }
   componentWillReceiveProps(nextProps){
-    this.state.panels.length = 0;
     this._weatherApiCall(nextProps.city);
   }
   _getPanel(){
@@ -63,6 +64,7 @@ class List extends React.Component{
     .then(response => {
       response.json()
       .then( myJson => {
+        this.state.panels.length = 0;
         for(var i = 4; i < myJson.list.length; i +=8){
           let weather = {};
           let jsonData = myJson.list[i];

@@ -1,7 +1,20 @@
+input{
+  border-radius: 20px;
+  border: 0;
+}
 .intro{
   font: "georgia";
   font-size: 50px;
   display: block;
+  text-align: center;
+}
+.form-box{
+  background-color: #DDD1F3;
+  border-radius: 20px;
+  padding: 5px;
+  border:10px;
+  margin:5px;
+  width: 150px;
   text-align: center;
 }
 .weather-wrapper{
