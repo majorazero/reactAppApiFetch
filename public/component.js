@@ -55,7 +55,10 @@ class List extends React.Component{
     this._weatherApiCall(this.props.city);
   }
   componentWillReceiveProps(nextProps){
-    this._weatherApiCall(nextProps.city);
+    if(this.props.city !== nextProps.city){
+      console.log(2);
+      this._weatherApiCall(nextProps.city);
+    }
   }
   _getPanel(){
     return this.state.panels.map((panel) => {
