@@ -1,21 +1,24 @@
 class Page extends React.Component{
   constructor(){
     super();
+    this._handleCode = this._handleCode.bind(this);
     this.state ={
       city: "Rosemead",
+      code: "200",
+      errMsg: ""
     };
   }
   render(){
     return(
       <div>
         <h1 className="intro">Weather of {this.state.city}!</h1>
-        {this._errorMessage()}
+        <form onSubmit={this._handleSubmit.bind(this)}>
+          <h2>{this.state.errMsg}</h2>
         <div className = "form-box">
           <div>Pick a new city here!</div>
-          <form onSubmit={this._handleSubmit.bind(this)}>
             <input placeholder="City Name" ref={city => this._city = city}/>
-          </form>
         </div>
+        </form>
         <List
           city={this.state.city}
           codeChange={this._handleCode.bind(this)}/>
@@ -23,18 +26,14 @@ class Page extends React.Component{
       </div>
     );
   }
-  _errorMessage(){
-    if(this.state.code == "404"){
-      return(<h2>That's not a real place, LOL.</h2>);
-    }
-  }
   _handleSubmit(event){
     event.preventDefault();
     this.setState({city: this._city.value});
   }
   _handleCode(cod){
-    console.log(cod);
-    //this.setState({code:cod});
+  //I cant set states in these or else I create bubbling events
+    if(cod == "404"){this.setState({errMsg: "Thats not a real place, LOL"});}
+    else{this.setState({errMsg: ""});}
   }
 }
 class List extends React.Component{
@@ -58,9 +57,6 @@ class List extends React.Component{
   componentWillReceiveProps(nextProps){
     this._weatherApiCall(nextProps.city);
   }
-  _codeChange(code){
-    this.props.codeChange(code.cod);
-  }
   _getPanel(){
     return this.state.panels.map((panel) => {
       return <Panel
@@ -80,7 +76,7 @@ class List extends React.Component{
     .then(response => {
       response.json()
       .then( myJson => {
-        this._codeChange(myJson);
+        this.props.codeChange(myJson.cod);
         if(myJson.cod == 404){
           return;
         }
