@@ -2,26 +2,39 @@ class Page extends React.Component{
   constructor(){
     super();
     this.state ={
-      city: "Rosemead"
+      city: "Rosemead",
     };
   }
   render(){
     return(
       <div>
-        <h1 className="intro">Weather of... {this.state.city}!</h1>
+        <h1 className="intro">Weather of {this.state.city}!</h1>
+        {this._errorMessage()}
         <div className = "form-box">
           <div>Pick a new city here!</div>
           <form onSubmit={this._handleSubmit.bind(this)}>
             <input placeholder="City Name" ref={city => this._city = city}/>
           </form>
         </div>
-        <List city={this.state.city}/>
+        <List
+          city={this.state.city}
+          codeChange={this._handleCode.bind(this)}/>
+        <img className="screen" src="assets/back.png" />
       </div>
     );
+  }
+  _errorMessage(){
+    if(this.state.code == "404"){
+      return(<h2>That's not a real place, LOL.</h2>);
+    }
   }
   _handleSubmit(event){
     event.preventDefault();
     this.setState({city: this._city.value});
+  }
+  _handleCode(cod){
+    console.log(cod);
+    //this.setState({code:cod});
   }
 }
 class List extends React.Component{
@@ -45,6 +58,9 @@ class List extends React.Component{
   componentWillReceiveProps(nextProps){
     this._weatherApiCall(nextProps.city);
   }
+  _codeChange(code){
+    this.props.codeChange(code.cod);
+  }
   _getPanel(){
     return this.state.panels.map((panel) => {
       return <Panel
@@ -64,44 +80,34 @@ class List extends React.Component{
     .then(response => {
       response.json()
       .then( myJson => {
-        this.state.panels.length = 0;
-        for(var i = 4; i < myJson.list.length; i +=8){
-          let weather = {};
-          let jsonData = myJson.list[i];
-          weather.temp = jsonData.main.temp;
-          weather.humid = jsonData.main.humidity;
-          weather.id = this.state.panels.length+1;
-          weather.weather = jsonData.weather[0].main;
-
-          var day = new Date(jsonData.dt*1000);
-          day = day.getDay();
-          switch(day){
-            case 0:
-              weather.day = "Sunday";
-              break;
-            case 1:
-              weather.day = "Monday";
-              break;
-            case 2:
-              weather.day = "Tuesday";
-              break;
-            case 3:
-              weather.day = "Wednesday";
-              break;
-            case 4:
-              weather.day = "Thursday";
-              break;
-            case 5:
-              weather.day = "Friday";
-              break;
-            case 6:
-              weather.day = "Saturday";
-              break;
-            default:
-              return;
-          }
-          this.setState({panels: this.state.panels.concat([weather])});
+        this._codeChange(myJson);
+        if(myJson.cod == 404){
+          return;
         }
+        else{
+          this.state.panels.length = 0;
+          for(var i = 4; i < myJson.list.length; i +=8){
+            let weather = {};
+            let jsonData = myJson.list[i];
+            weather.temp = jsonData.main.temp;
+            weather.humid = jsonData.main.humidity;
+            weather.id = this.state.panels.length+1;
+            weather.weather = jsonData.weather[0].main;
+            var day = new Date(jsonData.dt*1000);
+            day = day.getDay();
+            switch(day){
+              case 0:weather.day = "Sunday";break;
+              case 1:weather.day = "Monday";break;
+              case 2:weather.day = "Tuesday";break;
+              case 3:weather.day = "Wednesday";break;
+              case 4:weather.day = "Thursday";break;
+              case 5:weather.day = "Friday";break;
+              case 6:weather.day = "Saturday";break;
+              default:return;
+            }
+            this.setState({panels: this.state.panels.concat([weather])});
+        }
+      }
       });
     });
   }

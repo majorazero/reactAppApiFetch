@@ -1,15 +1,29 @@
+html{
+  font-family: 'Indie Flower';
+  background-color: #EDE9CF;
+}
 input{
+  font-family: 'Indie Flower';
   border-radius: 20px;
   border: 0;
+  padding-left: 5px;
 }
-.intro{
-  font: "georgia";
+h1{
   font-size: 50px;
-  display: block;
+  text-align: center;
+  margin-bottom: 10px;
+}
+h2{
   text-align: center;
 }
+.screen{
+  position: fixed;
+  bottom:0;
+  left:0;
+  width:200px;
+}
 .form-box{
-  background-color: #DDD1F3;
+  background-color: #C4C6AD;
   border-radius: 20px;
   padding: 5px;
   border:10px;
