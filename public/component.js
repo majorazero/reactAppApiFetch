@@ -2,10 +2,7 @@ class Page extends React.Component{
   constructor(){
     super();
     this._handleCode = this._handleCode.bind(this);
-    this.state ={
-      city: "Rosemead",
-      errMsg: ""
-    };
+    this.state ={city: "Rosemead", errMsg: ""};
   }
   render(){
     return(
@@ -25,12 +22,21 @@ class Page extends React.Component{
       </div>
     );
   }
+  /**
+  * handles submit event (changing cities)
+  * @param {SyntheticEvent} event
+  */
   _handleSubmit(event){
     event.preventDefault();
     this.setState({city: this._city.value});
   }
+  /**
+  * This is passed to the child List component that will update
+  * an error message if a 404 is returned because the user tried
+  * to fetch the weather forecast of a non-existant city
+  * @param {String} cod This is the status code of the API fetch
+  */
   _handleCode(cod){
-  //I cant set states in these or else I create bubbling events
     if(cod == "404"){this.setState({errMsg: "Thats not a real place, LOL"});}
     else{this.setState({errMsg: ""});}
   }
@@ -38,9 +44,7 @@ class Page extends React.Component{
 class List extends React.Component{
   constructor(){
     super();
-    this.state = {
-      panels:[]
-    };
+    this.state = {panels:[]};
   }
   render(){
     const panels = this._getPanel();
@@ -50,14 +54,32 @@ class List extends React.Component{
       </div>
     );
   }
+  /**
+  * This makes the initial forecast based on the default city.
+  * componentDidMount is a React Lifecycle method that gets called once
+  * the component is mounted.
+  */
   componentDidMount(){
     this._weatherApiCall(this.props.city);
   }
+  /**
+  * This makes a forecast when the city value of the parent changes.
+  * componentWillReceiveProps is a React Lifecycle method that gets called
+  * when a props has changed. Note that if the if statement that compares
+  * props is not called within
+  * this Lifecycle method, it will cause a bubbling event where it will continuously
+  * fetch the weather. (Memory Leak issue)
+  * @param {Object} nextProps This is the new changed props.
+  */
   componentWillReceiveProps(nextProps){
     if(this.props.city !== nextProps.city){
       this._weatherApiCall(nextProps.city);
     }
   }
+  /**
+  * This maps out array of React child object and passes props down
+  * Each panel represents a particular day with thier weather forecast
+  */
   _getPanel(){
     return this.state.panels.map((panel) => {
       return <Panel
@@ -69,6 +91,11 @@ class List extends React.Component{
               weather={panel.weather}/>
     });
   }
+  /**
+  * This is is the function that fetches the weather forecast
+  * and basically builds each panel (or at least the data of the panel)
+  * @param {String} name This is the name of the city being fetched from OpenWeatherMap
+  */
   _weatherApiCall(name){
     let apiKey = "c033c7d88ddd656c159ed45f9a39923e";
     let city = name || "Rosemead";
@@ -90,8 +117,7 @@ class List extends React.Component{
             weather.humid = jsonData.main.humidity;
             weather.id = this.state.panels.length+1;
             weather.weather = jsonData.weather[0].main;
-            var day = new Date(jsonData.dt*1000);
-            day = day.getDay();
+            var day = new Date(jsonData.dt*1000).getDay();
             switch(day){
               case 0:weather.day = "Sunday";break;
               case 1:weather.day = "Monday";break;
@@ -116,33 +142,28 @@ class Panel extends React.Component{
           {this._weather()}
           <div className="weather-day">{this.props.day}</div>
             <div className="weather-temp">
-              <div>{this.props.temp} &#8451;</div>
+              <div>{this.props.temp} &#176; F</div>
               <div>Humidity: {this.props.humid}%</div>
             </div>
         </ul>
     );
   }
+  /**
+  * This will pass an appropriate image icon based on the Weather
+  */
   _weather(){
     switch (this.props.weather){
       case "Clear":
       case "Sunny":
-        return (<img className="weather-icon" src="assets/sunny.png"/>);
-        break;
+        return (<img className="weather-icon" src="assets/sunny.png"/>);break;
       case "Rain":
-        return (<img className="weather-icon" src="assets/rain.png"/>);
-        break;
+        return (<img className="weather-icon" src="assets/rain.png"/>);break;
       case "Clouds":
-        return (<img className="weather-icon" src="assets/cloudy.png"/>);
-        break;
-      default:
-        return;
+        return (<img className="weather-icon" src="assets/cloudy.png"/>);break;
+      default:return;
     }
   }
 }
 $(function(){
-  ReactDOM.render(
-    <Page />,
-    document.getElementById('page')
-  );
-
+  ReactDOM.render(<Page />,document.getElementById('page'));
 });
