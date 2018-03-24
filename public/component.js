@@ -157,9 +157,14 @@ class Panel extends React.Component{
       case "Sunny":
         return (<img className="weather-icon" src="assets/sunny.png"/>);break;
       case "Rain":
+      case "Drizzle":
         return (<img className="weather-icon" src="assets/rain.png"/>);break;
       case "Clouds":
         return (<img className="weather-icon" src="assets/cloudy.png"/>);break;
+      case "Snow":
+        return (<img className="weather-icon" src="assets/snow.png"/>);break;
+      case "Thunderstorm":
+        return (<img className="weather-icon" src="assets/thunder.png"/>);break;
       default:return;
     }
   }
