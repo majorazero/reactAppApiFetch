@@ -164,6 +164,5 @@ class Panel extends React.Component{
     }
   }
 }
-$(function(){
-  ReactDOM.render(<Page />,document.getElementById('page'));
-});
+
+ReactDOM.render(<Page />,document.getElementById('page'));
